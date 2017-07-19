@@ -9,7 +9,7 @@ import org.springframework.context.support.GenericXmlApplicationContext;
 /**
  * This class is called from Fitnesse to create a SpringContext.
  * The context can be created with annotated
- * <code>{@link Configuration @Configuration}</code> classes,
+ * <code>{@link org.springframework.context.annotation.Configuration @Configuration}</code> classes,
  * a list of <code>basePackages</code> to scan,
  * or a list of <code>xml</code> files. 
  */
@@ -22,6 +22,8 @@ public final class SpringContextFactory {
   /**
    * Get the current {@link SpringContext}. If it has not been created by an earlier SetUp
    * in Fitnesse, you will get an error.
+   * 
+   * @return SpringContext the active and initialized {@link org.springframework.context.ApplicationContext @ApplicationContext}.
    */
   public static SpringContext currentSpringContext() {
     synchronized (MUTEX) {
@@ -34,7 +36,10 @@ public final class SpringContextFactory {
 
   /**
    * Initialize a {@link SpringContext} with a list of annotated
-   * <code>{@link Configuration @Configuration}</code> classes.
+   * <code>{@link org.springframework.context.annotation.Configuration @Configuration}</code> classes.
+   *
+   * @param annotatedClasses array of @Configuration class names.
+   * @return SpringContext the active and initialized {@link org.springframework.context.ApplicationContext @ApplicationContext}.
    */
   public SpringContext createSpringContextAnnotatedClasses(String... annotatedClasses) {
     synchronized (MUTEX) {
@@ -51,6 +56,9 @@ public final class SpringContextFactory {
 
   /**
    * Initialize a {@link SpringContext} with a list of packages to scan.
+   *
+   * @param basePackages array of packages to scan.
+   * @return SpringContext the active and initialized {@link org.springframework.context.ApplicationContext @ApplicationContext}.
    */
   public SpringContext createSpringContextBasePackages(String... basePackages) {
     synchronized (MUTEX) {
@@ -65,6 +73,9 @@ public final class SpringContextFactory {
 
   /**
    * Initialize a {@link SpringContext} with a list of xml files.
+   *
+   * @param resourceLocations array of xml file locations.
+   * @return SpringContext the active and initialized {@link org.springframework.context.ApplicationContext @ApplicationContext}.
    */
   public SpringContext createSpringContextResourceLocations(String... resourceLocations) {
     synchronized (MUTEX) {
