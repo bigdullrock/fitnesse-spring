@@ -1,0 +1,44 @@
+!define jsonToTest {!-{
+	"airplanes": [{
+		"id": "001",
+		"type": "747",
+		"brand": "Boeing",
+		"seats": "400",
+		"airline": "KLM"
+	}, {
+		"id": "002",
+		"type": "737",
+		"brand": "Boeing",
+		"seats": "400",
+		"airline": "Virgin"
+	}]
+    }
+-!}
+
+|script      |mock xml server setup |
+|add response|${jsonToTest}         |
+|add response|Broken|with status|500|
+|$url=       |get mock server url   |
+
+|script       |json http test                                                                                 |
+|get from     |$url                                                                                           |
+|check        |json path count      |airplanes[*]        |2                                                   |
+|check        |json path            |airplanes.length()  |2                                                   |
+|show         |all json path matches|airplanes[*].airline                                                     |
+|check        |all json path matches|airplanes[*].airline|=~/.*KLM.*Virgin.*/                                 |
+|check        |json path            |airplanes[0].seats  |400                                                 |
+|check        |element              |0                   |of json path|airplanes[?(@.airline=='KLM')].type|747|
+|set json path|airplanes[0].seats   |to                  |300                                                 |
+|check        |json path            |airplanes[0].seats  |300                                                 |
+|ensure       |json path exists     |airplanes[0].seats                                                       |
+|reject       |json path exists     |airplanes[0].beds                                                        |
+|ensure       |json path exists     |airplanes[*].airline                                                     |
+|reject       |json path exists     |airplanes[*].beds                                                        |
+|show         |response                                                                                       |
+
+And now a call which returns an error status code.
+
+|script                       |
+|reject|get from       |$url  |
+|check |response status|500   |
+|check |response       |Broken|

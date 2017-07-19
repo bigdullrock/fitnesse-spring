@@ -1,0 +1,29 @@
+!* Given two participants
+
+!|script                |create participant by script|
+|set first name         |Jane                        |
+|set last name          |Jamesson                    |
+|$participantNumberJane=|get participant number      |
+
+!|script                |create participant by script|
+|set first name         |John                        |
+|set last name          |Johnsson                    |
+|$participantNumberJohn=|get participant number      |
+
+
+*!
+
+!* When
+
+!|script    |logic fixture   |
+|when we calculate the grants|
+
+*!
+
+!* Then
+
+!|script|check grants by script                                                                            |
+|check  |number of grants for participant|$participantNumberJohn|2                                         |
+|check  |value of grant                  |1                     |for participant|$participantNumberJohn|200|
+|check  |value of grant                  |2                     |for participant|$participantNumberJohn|300|
+*!

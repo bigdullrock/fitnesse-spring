@@ -1,0 +1,48 @@
+Sample test on [[!-AngularJs-!][https://angularjs.org/]] application finding elements based on their Angular binding or model. 
+Inspired by http://anthonychu.ca/post/end-to-end-testing-angular-apps-with-nunit-and-specflow-using-protractornet/
+
+!note '''Please note:''' The application used in this test does NOT seem to work with !-PhantomJs-!. It does work when executed with Chrome or Firefox.
+
+|table template|add                   |
+|enter         |@{first} |as |first   |
+|enter         |@{second}|as |second  |
+|select        |+        |for|operator|
+|click         |Go!                   |
+|$result=      |value of |latest      |
+
+|script|Ng Browser Test                          |
+|open  |http://juliemr.github.io/protractor-demo/|
+
+
+|add                 |
+|first|second|result?|
+|1    |2     |3      |
+|3    |4     |7      |
+
+Now let's see what we can do with the repeater 'result in memory'.
+
+|script                                                                                                    |
+|check|number of             |result in memory|2                                                           |
+|check|value of              |Result          |in row number|1     |of|result in memory|7                  |
+|check|value of column number|3               |in row number|1     |of|result in memory|7                  |
+|show |value of              |Time            |in row where |Result|is|3               |of|result in memory|
+|show |take screenshot       |2additions                                                                   |
+
+We can not only enter values based on their model, but also retrieve their values.
+
+|table template|divide                            |
+|enter         |@{numerator}|as      |first       |
+|check         |value of    |first   |@{numerator}|
+|enter         |@{divisor}  |as      |second      |
+|select        |/           |for     |operator    |
+|check         |value of    |operator|/           |
+|click         |Go!                               |
+|$quotient=    |value of    |latest               |
+
+|divide                     |
+|numerator|divisor|quotient?|
+|10       |2      |5        |
+|9        |3      |3        |
+
+|script                            |
+|check|number of|result in memory|4|

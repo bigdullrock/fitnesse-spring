@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.bigdullrock</groupId>
+    <artifactId>fitnesse-spring</artifactId>
+    <version>0.1.0</version>
+    <packaging>jar</packaging>
+
+    <name>Fitnesse Spring</name>
+    <description>Inject Spring classes into Fitnesse Fixtures.</description>
+    <url>https://github.com/bigdullrock/fitnesse-spring</url>
+
+    <organization>
+        <name>Big Dull Rock</name>
+        <url>http://www.bigdullrock.com</url>
+    </organization>
+    <inceptionYear>2016</inceptionYear>
+
+    <developers>
+        <developer>
+            <id>charlesnharvey</id>
+            <name>Charles Harvey</name>
+            <organization>Big Dull Rock</organization>
+            <organizationUrl>http://www.bigdullrock.com</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>America/New_York</timezone>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <fitnesse.version>20161106</fitnesse.version>
+        <!--<fitnesse.version>20140201</fitnesse.version>-->
+        <spring.version>4.3.9.RELEASE</spring.version>
+        <junit.version>4.12</junit.version>
+
+        <hsac.fixtures.version>2.12.4</hsac.fixtures.version>
+        <!-- classpath that Fitnesse uses when not starting from IDE/maven -->
+        <wiki.dir>${project.basedir}/src/test/wiki</wiki.dir>
+        <standalone.classpath>${wiki.dir}/fixtures</standalone.classpath>
+        <fitnesse.port>9190</fitnesse.port>
+        <fitnesse.maven.plugin.version>1.9</fitnesse.maven.plugin.version>
+        <fitnesseSuiteToRun>FitnesseSpringSuite</fitnesseSuiteToRun>
+    </properties>
+
+    <scm>
+        <connection>scm:git:git@github.com:bigdullrock/fitnesse-spring.git</connection>
+        <url>scm:git:git@github.com:bigdullrock/fitnesse-spring.git</url>
+        <developerConnection>scm:git:git@github.com:bigdullrock/fitnesse-spring.git</developerConnection>
+    </scm>
+
+    <dependencies>
+        <!-- fitnesse -->
+        <dependency>
+            <groupId>org.fitnesse</groupId>
+            <artifactId>fitnesse</artifactId>
+            <version>${fitnesse.version}</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- spring -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring.version}</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- testing -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>nl.hsac</groupId>
+            <artifactId>hsac-fitnesse-fixtures</artifactId>
+            <version>${hsac.fixtures.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <!-- On clean throw away old screenshots, pagesources and downloads stored by BrowserTest -->
+                            <directory>${wiki.dir}/FitNesseRoot/files/</directory>
+                            <followSymlinks>false</followSymlinks>
+                            <includes>
+                                <include>screenshots/**</include>
+                                <include>pagesources/**</include>
+                                <include>downloads/**</include>
+                            </includes>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.20</version>
+                <configuration>
+                    <excludes>
+                        <!-- this test actually runs fitnesse tests
+                             therefore it will only be executed for
+                             integration-test goal
+                        -->
+                        <exclude>**/FixtureDebugTest.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.20</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- this test actually runs fitnesse tests-->
+                    <test>FixtureDebugTest</test>
+                    <systemPropertyVariables>
+                        <fitnesseSuiteToRun>${fitnesseSuiteToRun}</fitnesseSuiteToRun>
+                    </systemPropertyVariables>
+                    <properties>
+                        <property>
+                            <name>listener</name>
+                            <value>
+                                nl.hsac.fitnesse.junit.JUnitXMLPerPageListener,nl.hsac.fitnesse.junit.ProgressLoggerListener${extraFailsafeListeners}
+                            </value>
+                        </property>
+                    </properties>
+                    <!-- Our listener will create XML failsafe should not, or all tests are reported twice -->
+                    <disableXmlReport>true</disableXmlReport>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <executable>java</executable>
+                    <workingDirectory>${wiki.dir}</workingDirectory>
+                    <arguments>
+                        <argument>-jar</argument>
+                        <argument>fitnesse-standalone.jar</argument>
+                        <argument>-p</argument>
+                        <argument>${fitnesse.port}</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+            <plugin>
+                <!-- Use dependency:copy-dependencies to copy all jar from dependencies to ${standalone.classpath},
+                     where classes from this project end up also, so that all fixtures and
+                     dependencies are available to Fitnesse without need to have Maven to run tests.
+                -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <includes>**/*</includes>
+                    <excludes>META-INF,META-INF/**</excludes>
+                    <includeScope>runtime</includeScope>
+                    <excludeArtifactIds>fitnesse,junit</excludeArtifactIds>
+                    <outputDirectory>${standalone.classpath}</outputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>copy-fitnesse-standalone</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.fitnesse</groupId>
+                                    <artifactId>fitnesse</artifactId>
+                                    <classifier>standalone</classifier>
+                                    <overWrite>true</overWrite>
+                                </artifactItem>
+                            </artifactItems>
+                            <stripVersion>true</stripVersion>
+                            <outputDirectory>${wiki.dir}</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-dependencies-to-wiki-fixtures</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.portals.jetspeed-2</groupId>
+                <artifactId>jetspeed-unpack-maven-plugin</artifactId>
+                <version>2.3.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-hsac-baseline</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <unpack>
+                                <artifact>nl.hsac:hsac-fitnesse-fixtures:zip</artifact>
+                                <targetDirectory>${wiki.dir}</targetDirectory>
+                                <overwrite>false</overwrite>
+                                <resources>
+                                    <resource>
+                                        <exclude>fixtures/nl/**,fixtures/templates/**</exclude>
+                                    </resource>
+                                </resources>
+                            </unpack>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>nl.hsac</groupId>
+                        <artifactId>hsac-fitnesse-fixtures</artifactId>
+                        <version>${hsac.fixtures.version}</version>
+                        <classifier>standalone</classifier>
+                        <type>zip</type>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/assembly/standalone.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>create-standalone-zip</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.4</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jarsigner-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <id>verify</id>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <verbose>true</verbose>
+                    <certs>true</certs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.8</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
+</project>
+

@@ -1,0 +1,56 @@
+!* Given two participants
+
+!|create participants by decision table      |
+|first name|last name|participantNumber?     |
+|Jane      |Jamesson |$participantNumberJane=|
+|John      |Johnsson |$participantNumberJohn=|
+
+*!
+
+!* When
+
+!|script    |logic fixture   |
+|when we calculate the grants|
+
+*!
+
+!* Then
+
+Re-use the table fixture code, but use only those columns relevant to the current test:
+
+!|Query:grants query table|$participantNumberJohn|
+|value                    |grant type  |is funky |
+|200                      |FOO         |false    |
+|300                      |BAR         |false    |
+
+If order matters, use an ordered query:
+
+!|Ordered Query:grants query table|$participantNumberJohn|
+|value                            |grant type  |is funky |
+|300                              |BAR         |false    |
+|200                              |FOO         |false    |
+
+
+Leave a cell empty to simply show the value:
+
+!|Query:grants query table|$participantNumberJohn|
+|value                    |grant type  |comment  |
+|200                      |FOO         |         |
+|300                      |BAR         |         |
+
+Or use a regular expression to test part of the value:
+
+!|Query:grants query table|$participantNumberJohn |
+|value                    |grant type|comment     |
+|200                      |FOO       |=~/John/    |
+|300                      |BAR       |=~/Johnsson/|
+
+
+Use a subquery table to just check a row is there, but ignore any others:
+
+!|Subset query:grants query table       |
+|participant           |value|grant type|
+|$participantNumberJohn|200  |FOO       |
+
+
+*!

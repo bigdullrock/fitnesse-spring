@@ -1,0 +1,34 @@
+!1 Website testing using ''scenario'' and !-BrowserTest-!
+
+
+On this page we test whether we check the prices of a couple of houses for sale in Utrecht, The Netherlands.
+This test continues where ScriptTest left of. It uses a [[Slim scenario][.FitNesse.UserGuide.WritingAcceptanceTests.SliM.ScenarioTable]] to define a parameterized script.
+This is then invoked multiple times from a [[Decision table][.FitNesse.UserGuide.WritingAcceptanceTests.SliM.DecisionTable]], once for each row.
+
+
+The configuration of Selenium (i.e. which browser to use) and starting the browser session is done in the SuiteSetup. Which allows this configuration to be shared between tests. Closing the browser is done in SuiteTearDown, which happens after all tests are completed.
+
+|scenario|check original price _|street, number, city        |
+|open    |http://www.funda.nl                                |
+|select  |€ 1.000.000           |for|Van                     |
+|select  |€ 2.000.000           |for|Tot                     |
+|enter   |@{street}, @{city}    |as |Plaats, buurt, adres etc|
+|note    |select option from autocomplete                    |
+|wait    |1                     |seconds                     |
+|press   |down                                               |
+|press   |enter                                              |
+|click   |Zoek                                               |
+|click   |@{street} @{number}                                |
+|$price= |value of              |Vraagprijs                  |
+|$state= |value of              |Status                      |
+
+|script|browser test|
+
+|check original price                                    |
+|street      |number|city   |price?          |state?     |
+|Breitnerlaan|5     |Utrecht|€ 1.089.000 k.k.|Beschikbaar|
+|Groenedijk  |57    |Utrecht|€ 1.475.000 k.k.|Beschikbaar|
+
+
+Writing the scenario like this can become a bit cumbersome when many parameters are needed. They are repeated in: the scenario's first row, the scenario rows where they are used and the table headers where the scenario is invoked.
+Repeating the parameters in the first row of the scenario definition can be omitted using a custom extension to Slim. This is shown in TableTemplateTest.

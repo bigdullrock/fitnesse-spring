@@ -1,0 +1,8 @@
+!|script|grant logic by script table                         |
+|check  |grant value for participant aged|16|for type|FOO|200|
+|check  |grant value for participant aged|16|for type|BAR|300|
+
+!|grant logic by decision table|
+|age   |grant type   |value?   |
+|16    |FOO          |200      |
+|16    |BAR          |300      |

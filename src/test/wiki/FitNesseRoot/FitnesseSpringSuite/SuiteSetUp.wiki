@@ -1,0 +1,9 @@
+!*> Suite Set Up
+
+!|import                          |
+|com.bigdullrock.fitnesse.spring  |
+
+!|script                            |spring context factory      |
+|create spring context base packages|com.bigdullrock.fitnesse.sut|
+
+*!

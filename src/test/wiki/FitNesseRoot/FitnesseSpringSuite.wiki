@@ -1,0 +1,15 @@
+!1 Slim Table Types
+
+!contents -R2 -g -p -f -h
+
+!define TEST_SYSTEM {slim}
+
+
+!*> Class path for these examples
+The location when working standalone:
+!path fixtures
+!path fixtures/*.jar
+
+When developing and changing the fixtures, we will work based on the pom.xml:
+!pomFile ../../../pom.xml@compile,test
+*!
