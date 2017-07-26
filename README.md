@@ -132,6 +132,11 @@ public class ThingFixture {
 }
 ```
 
+## Special Thanks
+I copied a lot of this code from [Arnout Engelen](https://github.com/raboof/fitnesse-meetup-slimtables).
+It looks like he made a code repository for a presentation he gave. I wanted to make that code into
+a library and package it up for distribution.
+
 
 ## License
 Apache 2.0

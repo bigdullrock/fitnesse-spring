@@ -40,7 +40,7 @@ public final class SpringBootContextFactory {
   public static SpringContext currentSpringContext() {
     synchronized (MUTEX) {
       if (springContext == null) {
-        throw new IllegalStateException("SpringBootContextHolder should be initialized first");
+        throw new IllegalStateException("SpringContext should be initialized first");
       }
       return springContext;
     }
