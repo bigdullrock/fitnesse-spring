@@ -4,8 +4,8 @@ import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 
 /**
- * The classes that implement this interface are created by a {@link ContextFactory} during
- * initialization of Fitnesse. A call to the factory is run before any Suite tests are run. Then the
+ * The factory classes create an instance of this class during initialization of Fitnesse.
+ * A call to the factory is run before any Suite tests are run. Then the
  * factory is called from the constructor of each fixture and the factory calls {@link #autowire}.
  */
 public class SpringContext {
