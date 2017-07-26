@@ -55,20 +55,52 @@ SymbolTypes = fitnesse.wikitext.widgets.MavenClasspathSymbolType
 Add the following import and script either to a SuiteSetup page or to the test page directly:
 
 ```text
-!*> Suite Set Up
+!*> Suite Set Up For Scanning Base Packages
 
 !|import                        |
 |com.bigdullrock.fitnesse.spring|
 
-!|script                            |spring context factory      |
-|create spring context base packages|com.bigdullrock.fitnesse.sut|
+!|script                            |spring context factory      |test|
+|create spring context base packages|com.bigdullrock.fitnesse.sut     |
+*!
+```
 
-OR
-|create spring context annotated classes|com.bigdullrock.fitnesse.sut.SystemUnderTestConfig.class|
+* OR
 
-OR
+```text
+!*> Suite Set Up For Annotated Classes
+
+!|import                        |
+|com.bigdullrock.fitnesse.spring|
+
+!|script                                |spring context factory                       |test|
+|create spring context annotated classes|com.bigdullrock.fitnesse.sut.SystemUnderTestConfig|
+*!
+```
+
+* OR
+
+```text
+!*> Suite Set Up For XML Files
+
+!|import                        |
+|com.bigdullrock.fitnesse.spring|
+
+!|script                                 |spring context factory     |test|
 |create spring context resource locations|classpath:applicationContext.xml|
+*!
+```
 
+* OR
+
+```text
+!*> Suite Set Up For Spring Boot Application class
+
+!|import                        |
+|com.bigdullrock.fitnesse.spring|
+
+!|script              |spring boot context factory                       |test|
+|create spring context|com.bigdullrock.fitnesse.sut.SystemUnderTestApplication|
 *!
 ```
 

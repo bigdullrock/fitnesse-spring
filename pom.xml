@@ -44,8 +44,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <fitnesse.version>20161106</fitnesse.version>
-        <!--<fitnesse.version>20140201</fitnesse.version>-->
         <spring.version>4.3.9.RELEASE</spring.version>
+        <spring.boot.version>1.5.4.RELEASE</spring.boot.version>
         <junit.version>4.12</junit.version>
 
         <hsac.fixtures.version>2.12.4</hsac.fixtures.version>
@@ -92,6 +92,22 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
             <version>${spring.version}</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- spring boot -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+            <version>${spring.boot.version}</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>${spring.boot.version}</version>
             <scope>provided</scope>
             <optional>true</optional>
         </dependency>

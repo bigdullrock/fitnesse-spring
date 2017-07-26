@@ -3,7 +3,7 @@
 !|import                          |
 |com.bigdullrock.fitnesse.spring  |
 
-!|script                            |spring context factory      |
+!|script                            |spring context factory      |test|
 |create spring context base packages|com.bigdullrock.fitnesse.sut|
 
 *!

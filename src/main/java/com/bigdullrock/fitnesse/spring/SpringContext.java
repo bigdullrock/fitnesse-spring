@@ -1,30 +1,44 @@
 package com.bigdullrock.fitnesse.spring;
 
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 
 /**
- * This class is created by the {@link SpringContextFactory} during initialization of Fitnesse.
- * A call to the factory is run before any Suite tests are run. Then the factory is called
- * from the constructor of each fixture and the factory calls {@link #autowire}.
+ * The classes that implement this interface are created by a {@link ContextFactory} during
+ * initialization of Fitnesse. A call to the factory is run before any Suite tests are run. Then the
+ * factory is called from the constructor of each fixture and the factory calls {@link #autowire}.
  */
 public class SpringContext {
 
-  private final GenericApplicationContext context;
+  private final ConfigurableApplicationContext context;
 
-  public SpringContext(GenericApplicationContext context) {
+  public SpringContext(ConfigurableApplicationContext context) {
     this.context = context;
   }
 
   /**
-   * Autowire an object, specifically a FitNesse Fixture.
+   * This does not need to be called by the SpringBootContextHolderFactory, it refreshes on startup.
+   */
+  public void initialize() {
+    if (!this.context.isActive()) {
+      this.context.refresh();
+    }
+  }
+
+  /**
+   * Autowire an object, specifically a FitNesse Fixture. The <code>dependencyCheck</code> flag is
+   * set to false on purpose. If it were true, when the Fixture class tries to
+   * <code>autowire(this)</code>, it will try to autowire all setter methods. Since Fitnesse
+   * necessitates having the setter methods, this will cause the Spring initialization to fail
+   * because it cannot find those dependencies.
    *
    * @param toAutowire the bean to autowire
    */
   public void autowire(Object toAutowire) {
-    context.getBeanFactory().autowireBeanProperties(toAutowire,
+    context.getAutowireCapableBeanFactory().autowireBeanProperties(toAutowire,
         AutowireCapableBeanFactory.AUTOWIRE_BY_NAME, false);
-    context.getBeanFactory().initializeBean(toAutowire, toAutowire.getClass().getName());
+    context.getAutowireCapableBeanFactory().initializeBean(toAutowire,
+        toAutowire.getClass().getName());
   }
 
   public Object getBean(String name) {
@@ -35,10 +49,15 @@ public class SpringContext {
     return context.getBean(beanType);
   }
 
+  public ConfigurableApplicationContext getContext() {
+    return context;
+  }
+
   /**
    * Close the Spring Context.
    */
   public void close() {
-    context.close();
+    getContext().close();
   }
+
 }
