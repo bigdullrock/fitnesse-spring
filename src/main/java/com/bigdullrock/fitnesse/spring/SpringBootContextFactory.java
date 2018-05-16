@@ -59,8 +59,9 @@ public final class SpringBootContextFactory {
     synchronized (MUTEX) {
       if (springContext == null) {
         try {
-          return new SpringContext(
+          springContext = new SpringContext(
               SpringApplication.run(Class.forName(bootClassName), new String[] {}));
+          return springContext;
         } catch (ClassNotFoundException ex) {
           throw new IllegalStateException(
               "SpringContext not initialized - unknown Annotated Class", ex);
