@@ -9,14 +9,14 @@ has been created, it can be used to inject beans into Fitnesse fixtures.
 ## Setup
 ```gradle
 dependencies {
-    compile('com.bigdullrock:fitnesse-spring:0.1.0')
+    compile('com.bigdullrock:fitnesse-spring:1.0.0')
 }
 ```
 ```xml
 <dependency>
     <groupId>com.bigdullrock</groupId>
     <artifactId>fitnesse-spring</artifactId>
-    <version>0.1.0</version>
+    <version>1.0.0</version>
     <scope>test</scope>
 </dependency>
 ```
