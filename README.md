@@ -108,6 +108,8 @@ Add the following import and script either to a SuiteSetup page or to the test p
 
 ```java
 import static com.bigdullrock.fitnesse.spring.SpringContextFactory.currentSpringContext;
+// or use the following import for Spring Boot applications
+// import static com.bigdullrock.fitnesse.spring.SpringBootContextFactory.currentSpringContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
